@@ -12,6 +12,19 @@ A simple web application to learn model inferencing concepts using image classif
 
 ## 🚀 Quick Start
 
+### Option 1: Using Docker (Recommended)
+
+1. **Build and Run with Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Open Your Browser**
+   - Go to `http://localhost:8000`
+   - Upload an image and see the AI predictions!
+
+### Option 2: Local Python Installation
+
 1. **Install Dependencies**
    ```bash
    pip install -r requirements.txt
@@ -60,13 +73,32 @@ A simple web application to learn model inferencing concepts using image classif
 - Add GPU acceleration with CUDA
 - Try different types of models (object detection, image captioning)
 
+## 🐳 Docker Commands
+
+```bash
+# Build and run with Docker Compose (easiest)
+docker-compose up --build
+
+# Or build and run manually
+docker build -t image-classifier .
+docker run -p 8000:8000 image-classifier
+
+# Stop the application
+docker-compose down
+```
+
 ## 🛠️ Code Structure
 
 ```
 model-inferencing/
-├── main.py           # FastAPI backend + HTML frontend
-├── requirements.txt  # Python dependencies
-└── README.md        # This file
+├── main.py              # FastAPI backend + HTML frontend
+├── requirements.txt     # Python dependencies
+├── Dockerfile          # Docker container configuration
+├── docker-compose.yml  # Docker Compose setup
+├── .dockerignore       # Docker build exclusions
+├── static/             # Static files directory
+├── CLAUDE.md           # Project memory for Claude Code
+└── README.md           # This file
 ```
 
 ## 🤔 Understanding the Results
