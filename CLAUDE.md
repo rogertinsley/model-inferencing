@@ -1,42 +1,46 @@
 # Claude Code Project Memory
 
 ## Project Overview
-This is an **Image Classifier Learning App** designed to teach model inferencing concepts through hands-on practice. The app provides a simple web interface where users can upload images and see AI predictions in real-time.
+This is an **AI Model Comparison Learning App** designed to teach model inferencing concepts through hands-on comparison of different CNN architectures. The app provides an interactive web interface where users can compare MobileNet v2 vs ResNet-50 performance, understand speed vs accuracy trade-offs, and learn when to choose different model architectures.
 
 ## Architecture
 - **Backend**: FastAPI with Python
-- **Frontend**: Embedded HTML/CSS/JavaScript (single-page app)
-- **ML Model**: MobileNet v2 via Hugging Face Transformers
+- **Frontend**: Enhanced HTML/CSS/JavaScript with interactive model selection
+- **ML Models**: Dual model support (MobileNet v2 + ResNet-50) via Hugging Face Transformers
 - **Image Processing**: PIL (Python Imaging Library)
+- **Performance Monitoring**: psutil for memory tracking
 - **Deployment**: Docker containerized with docker-compose
 
 ## Key Learning Concepts Demonstrated
-1. **Model Loading**: Pre-trained model initialization at startup
-2. **Image Preprocessing**: Format conversion, RGB handling
-3. **Model Inference**: Single-line prediction calls
-4. **Result Processing**: Confidence scores, top-N predictions
-5. **Performance Monitoring**: Processing time measurement
-6. **Error Handling**: Graceful handling of invalid uploads
+1. **Model Architecture Comparison**: MobileNet v2 vs ResNet-50 design differences
+2. **Speed vs Accuracy Trade-offs**: Real performance implications of architecture choices
+3. **Resource Usage Analysis**: Memory consumption and computational requirements
+4. **Model Selection Strategy**: When to prioritize efficiency vs accuracy
+5. **Performance Monitoring**: Processing time and memory usage measurement
+6. **Interactive Learning**: Side-by-side model comparison with visual feedback
+7. **Error Handling**: Graceful handling of invalid uploads and model failures
 
 ## File Structure
 ```
 model-inferencing/
-├── main.py              # Main FastAPI application with embedded frontend
-├── requirements.txt     # Python dependencies
+├── main.py              # FastAPI application with dual model support + enhanced UI
+├── requirements.txt     # Python dependencies (includes psutil)
 ├── Dockerfile          # Docker container configuration
 ├── docker-compose.yml  # Docker Compose setup for easy deployment
 ├── .dockerignore       # Docker build exclusions
 ├── static/             # Directory for static files (currently empty)
-├── README.md           # User documentation and setup instructions
+├── README.md           # Comprehensive user documentation with model comparison info
 └── CLAUDE.md           # This file - project memory for Claude Code
 ```
 
 ## Key Code Locations
-- **Model Loading**: `main.py:23` - Startup event that loads MobileNet
-- **Image Processing**: `main.py:67` - PIL image preprocessing pipeline
-- **Inference Call**: `main.py:72` - The actual model prediction
-- **Frontend**: `main.py:31-119` - Embedded HTML interface
-- **API Endpoint**: `main.py:121` - `/predict` endpoint for image classification
+- **Model Loading**: `main.py:46-59` - Startup event that loads both MobileNet and ResNet
+- **Model Information**: `main.py:24-42` - Model specifications and metadata
+- **Memory Monitoring**: `main.py:60-62` - psutil integration for resource tracking
+- **Single Model Prediction**: `main.py:375-405` - Enhanced `/predict` endpoint with model selection
+- **Model Comparison**: `main.py:407-446` - `/compare` endpoint for side-by-side analysis
+- **Enhanced Frontend**: `main.py:64-374` - Interactive UI with model selection and comparison
+- **Model Info API**: `main.py:448-452` - `/models` endpoint for model metadata
 
 ## Dependencies
 - `fastapi` - Web framework
@@ -45,6 +49,7 @@ model-inferencing/
 - `torch` + `torchvision` - PyTorch backend
 - `pillow` - Image processing
 - `python-multipart` - File upload handling
+- `psutil` - System performance monitoring
 
 ## How to Run
 
@@ -65,31 +70,37 @@ Then visit `http://localhost:8000`
 
 ### Docker Testing
 - Build and test: `docker-compose up --build`
-- Manual Docker build: `docker build -t image-classifier . && docker run -p 8000:8000 image-classifier`
+- Manual Docker build: `docker build -t ai-model-comparison . && docker run -p 8000:8000 ai-model-comparison`
 
 ### Local Testing
-- Basic import test: `python -c "from main import app; print('✅ App imports successfully!')"`
-- Full server test: `python main.py` (then test uploads via browser)
+- Basic import test: `python -c "from main import app; print('✅ Enhanced app imports successfully!')"`
+- Full server test: `python main.py` (then test model selection and comparison via browser)
+- API endpoints test: Test `/predict`, `/compare`, and `/models` endpoints
 
 ## Educational Value
 This project teaches:
-- **Beginner Level**: What is model inference? How do confidence scores work?
-- **Intermediate Level**: Image preprocessing, API design, model loading patterns
-- **Advanced Level**: Performance optimization, error handling, model comparison
+- **Beginner Level**: Model architecture differences, speed vs accuracy concepts
+- **Intermediate Level**: Performance profiling, resource usage analysis, model selection
+- **Advanced Level**: Architecture trade-offs, optimization strategies, comparative analysis
+- **Practical Skills**: When to choose MobileNet vs ResNet in real applications
 
 ## Future Enhancements (Optional)
-- [ ] Compare multiple models (MobileNet vs ResNet)
+- [x] Compare multiple models (MobileNet vs ResNet) - **COMPLETED**
+- [ ] Add more architectures (EfficientNet, Vision Transformer)
 - [ ] Batch processing for multiple images
 - [ ] GPU acceleration support
 - [ ] Custom model training pipeline
-- [ ] Model performance benchmarking
+- [ ] Advanced metrics (FLOPs, detailed timing breakdown)
+- [ ] Export comparison reports
 
 ## Notes for Claude Code
-- The app uses MobileNet v2 for fast CPU inference
-- All frontend code is embedded in main.py for simplicity
-- Error handling covers common edge cases (non-images, corrupted files)
-- Processing time is measured and displayed for educational purposes
-- The model downloads automatically on first run (~14MB)
+- The app loads both MobileNet v2 (14MB) and ResNet-50 (98MB) on startup
+- Enhanced frontend with interactive model selection and comparison modes
+- Real-time performance monitoring with memory usage tracking
+- Educational tooltips explain architecture differences
+- Side-by-side comparison mode shows speed vs accuracy trade-offs
+- Model downloads automatically on first run (~112MB total)
+- Graceful handling of model loading failures and memory constraints
 
 ## Docker Benefits
 - **Consistent Environment**: Same runtime across all systems
@@ -106,7 +117,9 @@ This project teaches:
 - If models won't download: Check internet connection and firewall settings
 
 ### General Issues
-- If model download fails: Check internet connection, Hugging Face may be rate-limiting
-- If imports fail: Ensure all dependencies are installed with correct versions
+- If model downloads fail: Check internet connection, Hugging Face may be rate-limiting
+- If imports fail: Ensure all dependencies including psutil are installed
 - If server won't start: Check port 8000 isn't already in use
-- If predictions are slow: This is normal on CPU, ~100-500ms expected
+- If memory usage is high: Normal with dual models loaded (~500MB+ RAM expected)
+- If predictions are slow: MobileNet ~100-300ms, ResNet ~500-2000ms on CPU
+- If comparison fails: Ensure sufficient memory for running both models
